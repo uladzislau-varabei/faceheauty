@@ -1,0 +1,33 @@
+# Some files
+credentials.json
+bot.txt
+ideas.txt
+requirements_checklist.txt
+
+# Dataset folder
+SCUT-FBP5500_v2
+
+# Images folders
+bot_temp_images
+best_visualization_valid_images
+test_images
+visualization_valid_images
+
+# Development related folders
+.idea
+.ipynb_checkpoints
+__pycache__
+
+# Face models data (models are too large)
+*.h5
+face_models/*/__pycache__
+keras_face_toolbox
+
+# Training information
+configs
+history
+logs
+models
+
+# Jupyter notebooks
+*.ipynb

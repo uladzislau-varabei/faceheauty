@@ -1,0 +1,48 @@
+{
+    "images_groups": null,
+    "image_target_size": [
+        112,
+        112
+    ],
+    "max_score": 5,
+    "use_mixed_precision": true,
+    "backbone": "insightface",
+    "pooling": "avg",
+    "n_outputs": 2,
+    "layers": 0,
+    "units": 256,
+    "act": "selu",
+    "use_batchnorm": false,
+    "use_dropout": false,
+    "dropout_rate": 0.3,
+    "loss_name": "CE",
+    "tl_workflow": "stable",
+    "ftune_batchnorm": true,
+    "ftune_train_patterns": null,
+    "normalize_embeddings": true,
+    "model_version": 1,
+    "use_test_split": false,
+    "ftune_model_postfix": null,
+    "tl_train_params": {
+        "epochs": 1000,
+        "optimizer_name": "adam",
+        "optimizer_lr": 0.001,
+        "early_stop_cb": true,
+        "reduce_lr_cb": true,
+        "tboard_cb": true,
+        "save_last_model": true,
+        "jupyter_mode": true
+    },
+    "ftune_train_params": {
+        "epochs": 1000,
+        "optimizer_name": "sgd",
+        "optimizer_lr": 1e-05,
+        "weights_decay": 0.0001,
+        "early_stop_cb": true,
+        "reduce_lr_cb": true,
+        "tboard_cb": true,
+        "save_intermediate_models": true,
+        "save_last_model": true,
+        "jupyter_mode": true
+    }
+}
