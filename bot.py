@@ -336,7 +336,7 @@ def show_settings(message):
 
 
 @bot.message_handler(commands=['reset'])
-def set_palette(message):
+def reset_settings(message):
     global SETTINGS
     cid = message.chat.id
     if cid in SETTINGS.keys():
