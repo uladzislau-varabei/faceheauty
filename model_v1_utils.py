@@ -17,9 +17,10 @@ FACE_BACKBONES = ['facenet', 'face_evoLVe_ir50'.lower(), 'insightface']
 
 # https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/vision/ipynb/image_classification_efficientnet_fine_tuning.ipynb#scrollTo=4BpQqKIeglKl
 
-def get_base_model(backbone, pooling=None, input_shape=None, normalize_embeddings=False):
+def get_base_model(backbone, pooling=None, input_shape=None, normalize_embeddings=False, load_weights=True):
     base_model_kwargs = {
-        'include_top': False, 'pooling': pooling, 'input_shape': input_shape
+        'include_top': False, 'pooling': pooling, 'input_shape': input_shape,
+        'weights': 'imagenet' if load_weights else None
     }
     lw_backbone = backbone.lower()
     if lw_backbone == 'mobilenet':
@@ -49,15 +50,24 @@ def get_base_model(backbone, pooling=None, input_shape=None, normalize_embedding
     elif lw_backbone == 'effnetB7'.lower():
         base_model = tf.keras.applications.efficientnet.EfficientNetB7(**base_model_kwargs)
     elif lw_backbone == 'facenet':
-        weights_path = os.path.join('face_models', 'facenet', 'weights', 'facenet_keras_weights.h5')
+        if load_weights:
+            weights_path = os.path.join('face_models', 'facenet', 'weights', 'facenet_keras_weights.h5')
+        else:
+            weights_path = None
         add_kwargs = {'normalize_embeddings': normalize_embeddings, 'weights_path': weights_path}
         base_model = InceptionResNetV1(**{**base_model_kwargs, **add_kwargs})
     elif lw_backbone == 'face_evoLVe_ir50'.lower():
-        weights_path = os.path.join('face_models', 'face_evoLVe_ir50', 'backbone_ir50_ms1m_keras.h5')
+        if load_weights:
+            weights_path = os.path.join('face_models', 'face_evoLVe_ir50', 'backbone_ir50_ms1m_keras.h5')
+        else:
+            weights_path = None
         add_kwargs = {'normalize_embeddings': normalize_embeddings, 'weights_path': weights_path}
         base_model = IR50(**{**base_model_kwargs, **add_kwargs})
     elif lw_backbone == 'insightface':
-        weights_path = os.path.join('face_models', 'insightface', 'lresnet100e_ir_keras.h5')
+        if load_weights:
+            weights_path = os.path.join('face_models', 'insightface', 'lresnet100e_ir_keras.h5')
+        else:
+            weights_path = None
         add_kwargs = {'normalize_embeddings': normalize_embeddings, 'weights_path': weights_path}
         base_model = LResNet100E_IR(**{**base_model_kwargs, **add_kwargs})
     else:
@@ -162,7 +172,7 @@ def convert_face_model_to_fp32(model, config):
     dropout_rate = config['dropout_rate']
 
     base_model = get_base_model(
-        backbone, pooling, input_shape, normalize_embeddings=normalize_embeddings
+        backbone, pooling, input_shape, normalize_embeddings=normalize_embeddings, load_weights=False
     )
     base_model.trainable = False
     top_model = create_top_model(
