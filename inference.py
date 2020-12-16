@@ -304,9 +304,9 @@ class InferenceBeautyApp:
         if isinstance(score, list):
             adj_score = score
         else:
-            mult1 = 1.2
-            mult2 = 1.15
-            mult3 = 1.1
+            mult1 = 1.15
+            mult2 = 1.1
+            mult3 = 1.05
             if score <= 0.8 / mult1:
                 adj_score = score * mult1
             elif score <= 0.9 / mult2:
