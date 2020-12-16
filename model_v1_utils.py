@@ -15,8 +15,6 @@ DROPOUT_RATE = 0.3
 FACE_BACKBONES = ['facenet', 'face_evoLVe_ir50'.lower(), 'insightface']
 
 
-# https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/vision/ipynb/image_classification_efficientnet_fine_tuning.ipynb#scrollTo=4BpQqKIeglKl
-
 def get_base_model(backbone, pooling=None, input_shape=None, normalize_embeddings=False, load_weights=True):
     base_model_kwargs = {
         'include_top': False, 'pooling': pooling, 'input_shape': input_shape,
