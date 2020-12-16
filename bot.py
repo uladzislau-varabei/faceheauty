@@ -179,30 +179,33 @@ def handle_photos(message):
     else:
         postfixes = DEFAULT_MODEL, DEFAULT_APPLY_MASK, DEFAULT_CMAP
 
-    image_path = save_image(message)
-    temp_paths.append(image_path)
-    image_data = prepare_image(image_path)
-    r = send_image_for_processing(image_data, postfixes)
+    try:
+        image_path = save_image(message)
+        temp_paths.append(image_path)
+        image_data = prepare_image(image_path)
+        r = send_image_for_processing(image_data, postfixes)
 
-    # Reset params
-    if cid in SETTINGS.keys():
-        if ADV_RUN_KEY in SETTINGS[cid].keys():
-            SETTINGS.pop(cid, None)
+        # Reset params
+        if cid in SETTINGS.keys():
+            if ADV_RUN_KEY in SETTINGS[cid].keys():
+                SETTINGS.pop(cid, None)
 
-    bot.reply_to(message, 'Processing uploaded photo...')
+        bot.reply_to(message, 'Processing uploaded photo...')
 
-    if r.status_code == 200:
-        bot.send_message(cid, 'Photo processed. Preparing output images...')
-        r_outputs = convert_from_json_response(r)
-        for idx, out in enumerate(r_outputs):
-            time_postfix = create_time_postfix()
-            out_image_path = os.path.join(IMAGES_DIR, f'out_{idx}_{cid}_{time_postfix}.jpeg')
-            temp_paths.append(out_image_path)
-            # out[0] is a np.array with dtype=uint8
-            Image.fromarray(out[0]).save(out_image_path)
-            with open(out_image_path, 'rb') as out_image:
-                bot.send_photo(cid, out_image, caption=out[1])
-    else:
+        if r.status_code == 200:
+            bot.send_message(cid, 'Photo processed. Preparing output images...')
+            r_outputs = convert_from_json_response(r)
+            for idx, out in enumerate(r_outputs):
+                time_postfix = create_time_postfix()
+                out_image_path = os.path.join(IMAGES_DIR, f'out_{idx}_{cid}_{time_postfix}.jpeg')
+                temp_paths.append(out_image_path)
+                # out[0] is a np.array with dtype=uint8
+                Image.fromarray(out[0]).save(out_image_path)
+                with open(out_image_path, 'rb') as out_image:
+                    bot.send_photo(cid, out_image, caption=out[1])
+        else:
+            bot.reply_to(message, 'Sorry, something went wrong. Maybe try another photo?')
+    except:
         bot.reply_to(message, 'Sorry, something went wrong. Maybe try another photo?')
 
     if SHOULD_REMOVE_TEMP_IMAGES:
