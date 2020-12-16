@@ -275,7 +275,6 @@ def set_model_handler(message):
         SETTINGS[cid] = {}
     SETTINGS[cid][KEY_MODEL] = message.text
     bot.send_message(cid, f"Model set to '{message.text}'")
-    print(SETTINGS)
 
 
 @bot.message_handler(commands=['set_face_region'])
